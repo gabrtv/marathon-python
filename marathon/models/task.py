@@ -14,13 +14,11 @@ class MarathonTask(MarathonResource):
     :param list[int] ports: allocated ports
     :param list[int] service_ports: ports exposed for load balancing
     :param staged_at: when this task was staged
-    :type staged_at: datetime or str
+    :type staged_at: datetime or int
     :param started_at: when this task was started
-    :type started_at: datetime or str
+    :type started_at: datetime or int
     :param str version: app version with which this task was started
     """
-
-    DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
 
     def __init__(self, app_id=None, health_check_results=None, host=None, id=None, ports=None, service_ports=None,
                  staged_at=None, started_at=None, version=None):
@@ -35,9 +33,9 @@ class MarathonTask(MarathonResource):
         self.ports = ports or []
         self.service_ports = service_ports or []
         self.staged_at = staged_at if (staged_at is None or isinstance(staged_at, datetime)) \
-            else datetime.strptime(staged_at, self.DATETIME_FORMAT)
+            else datetime.fromtimestamp(staged_at / 1000)
         self.started_at = started_at if (started_at is None or isinstance(started_at, datetime)) \
-            else datetime.strptime(started_at, self.DATETIME_FORMAT)
+            else datetime.fromtimestamp(staged_at / 1000)
         self.version = version
 
 
